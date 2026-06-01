@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - NpcSnok</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-page">
+    <div id="loginSection" class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <h1> Panel Admin</h1>
+                <p>Gestiona tu lista de espera</p>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" placeholder="Ingresa tu usuario" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Acceder</button>
+                    <div id="loginError" class="error-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminSection" class="admin-section hidden">
+        <header class="admin-header">
+            <div class="admin-header-content">
+                <h1>Panel de Control - NpcSnok</h1>
+                <button id="logoutBtn" class="btn btn-secondary">Cerrar sesión</button>
+            </div>
+        </header>
+
+        <main class="admin-container">
+            
+            <section class="admin-section-card">
+                <h2>Agregar Nuevo Request</h2>
+                <form id="addRequestForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="newAlias">Alias del cliente *</label>
+                        <input type="text" id="newAlias" placeholder="Ej: Luna.art" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newDescription">Descripción del request *</label>
+                        <textarea id="newDescription" placeholder="Ej: Fan art de mi OC, estilo anime, fondo cosmic..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="newEstimatedDays">Días estimados</label>
+                        <input type="number" id="newEstimatedDays" value="7" min="1" max="30">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Agregar a la Cola</button>
+                    <div id="addError" class="error-message"></div>
+                </form>
+            </section>
+
+            
+            <section class="admin-section-card">
+                <h2>Agregar Nuevo Post</h2>
+                <form id="addPostForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="postType">Tipo de Post *</label>
+                        <select id="postType" required onchange="updatePostTypeFields()">
+                            <option value="">Selecciona un tipo</option>
+                            <option value="text">Texto</option>
+                            <option value="image">Imagen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="postTitle">Título *</label>
+                        <input type="text" id="postTitle" placeholder="Título del post" required>
+                    </div>
+                    <div class="form-group" id="postContentGroup">
+                        <label for="postContent">Contenido *</label>
+                        <textarea id="postContent" placeholder="Contenido del post..." required></textarea>
+                    </div>
+                    <div class="form-group" id="postImageGroup" style="display: none;">
+                        <label for="postImageFile">Selecciona una imagen *</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="postImageFile" accept="image/*" class="file-input">
+                            <label for="postImageFile" class="file-input-label">
+                                📁 Seleccionar imagen
+                            </label>
+                            <span id="fileName" class="file-name"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="postDescriptionGroup" style="display: none;">
+                        <label for="postDescription">Descripción</label>
+                        <textarea id="postDescription" placeholder="Descripción de la imagen..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Agregar Post</button>
+                    <div id="addPostError" class="error-message"></div>
+                </form>
+            </section>
+
+            
+            <section class="admin-section-card">
+                <h2>Requests en Administración</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-status="all">Todos</button>
+                    <button class="filter-tab" data-status="waiting">En Espera</button>
+                    <button class="filter-tab" data-status="in_progress">En Proceso</button>
+                    <button class="filter-tab" data-status="completed">Completados</button>
+                </div>
+                <div id="requestsTable" class="requests-table">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Cargando requests...</p>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section class="admin-section-card">
+                <h2>Posts Publicados</h2>
+                <div id="postsTable" class="posts-admin-table">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Cargando posts...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Editar Request</h2>
+            <form id="editForm" class="form-grid">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="editAlias">Alias</label>
+                    <input type="text" id="editAlias" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Descripción</label>
+                    <textarea id="editDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editEstimatedDays">Días estimados</label>
+                    <input type="number" id="editEstimatedDays" min="1" max="30">
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Estado</label>
+                    <select id="editStatus">
+                        <option value="waiting">En Espera</option>
+                        <option value="in_progress">En Proceso</option>
+                        <option value="completed">Completado</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Guardar Cambios</button>
+                <div id="editError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/admin.js?v=2"></script>
+</body>
+</html>

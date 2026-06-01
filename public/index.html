@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NpcSnok - Lista de Espera de Requests</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="public-page">
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <h1 class="logo">
+                    <span>NpcSnok</span>
+                </h1>
+                <button id="languageToggle" class="language-toggle" title="Switch language / Cambiar idioma">EN</button>
+            </div>
+            <p class="tagline">Requests • Digital Art • Animation</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="hero">
+            <h2 id="heroTitle">Mi Lista de Espera</h2>
+            <p id="heroDescription">Posiciones actuales para nuevos requests</p>
+            <div class="queue-stats">
+                <div class="stat">
+                    <div class="stat-number" id="totalWaiting">--</div>
+                    <div class="stat-label" id="statLabel1">en espera</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="estimatedTime">--</div>
+                    <div class="stat-label" id="statLabel2">tiempo nuevo cliente</div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="kofi-section">
+            <div class="kofi-card">
+                <h3 id="kofiTitle">¿Quieres saltarte la fila?</h3>
+                <p id="kofiDescription">Por solo $6 USD puedo priorizar tu request</p>
+                <a href="https://ko-fi.com/npcsnok" target="_blank" class="btn-kofi" id="kofiLink">
+                     Ir a Ko-fi
+                </a>
+            </div>
+        </section>
+
+        
+        <div class="public-layout">
+            
+            <div class="queue-main">
+                
+                <section class="queue-section">
+                    <h3 class="section-title" id="queueTitle">Cola Actual</h3>
+                    <div id="queueContainer" class="queue-grid">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Cargando lista...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            
+            <aside class="posts-sidebar" id="postsSidebar">
+                <h3 id="postsTitle">Novedades</h3>
+                <div id="postsContainer" class="posts-container">
+                    <p style="color: var(--text-tertiary); font-size: 0.9rem;">Aún no hay posts</p>
+                </div>
+            </aside>
+        </div>
+
+        
+        <div id="detailModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <div class="modal-header">
+                    <h2 id="modalPosition"></h2>
+                    <span class="modal-alias" id="modalAlias"></span>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-field">
+                        <h4 id="descriptionLabel">Descripción</h4>
+                        <p id="modalDescription"></p>
+                    </div>
+                    <div class="modal-field">
+                        <h4 id="statusLabel">Estado</h4>
+                        <p id="modalStatus"></p>
+                    </div>
+                    <div class="modal-field">
+                        <h4 id="estimatedLabel">Tiempo estimado para esta request</h4>
+                        <p id="modalEstimated"></p>
+                    </div>
+                    <div class="modal-field">
+                        <h4 id="accumulatedLabel">Tiempo acumulado (incluyendo requests anteriores)</h4>
+                        <p id="modalAccumulatedTime"></p>
+                    </div>
+                    <div class="modal-field">
+                        <h4 id="createdLabel">Fecha de creación</h4>
+                        <p id="modalCreatedAt"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="https://ko-fi.com/npcsnok" target="_blank" class="btn btn-primary" id="modalButton">
+                        Pasar a cola prioritaria
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p id="footerText">&copy; Enviame mensaje privado para agregarte.</p>
+            <div class="footer-links">
+                <a href="https://ko-fi.com/npcsnok" target="_blank">Ko-fi</a>
+                <a href="https://twitter.com/npcsnok" target="_blank">Twitter</a>
+                <a href="https://www.deviantart.com/npcsnok" target="_blank">DeviantArt</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/translations.js"></script>
+    <script src="/language-switcher.js"></script>
+    <script src="/realtime.js"></script>
+</body>
+</html>
