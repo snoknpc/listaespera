@@ -8,6 +8,11 @@ require('dotenv').config();
 const publicRoutes = require('./routes/public');
 const adminRoutes = require('./routes/admin');
 
+// Trust proxy para Render (necesario para cookies en HTTPS detrás de proxy)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'tu_secreto_seguro_aqui_cambia_esto_en_produccion',
   resave: false,
